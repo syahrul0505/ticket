@@ -17,7 +17,6 @@ const pool = new Pool({
     password: 'root',
 });
 
-
 // =====================
 // KONFIGURASI CLIENT WA
 // =====================
@@ -91,52 +90,62 @@ function startConsumerLoop() {
         if (isProcessing) return;
         isProcessing = true;
 
-        const item = await consumeQueueWhatsapp(); // ambil 1 antrian
+        const queue = await consumeQueueWhatsapp();
 
-        if (!item) {
-            isProcessing = false;
-            return;
-        }
-
-        const phoneNumber = item.phone;
-        const chatId = phoneNumber + "@c.us";
-
-        try {
-            const isRegistered = await client.isRegisteredUser(chatId);
-            if (!isRegistered) {
-                console.log(`❌ Nomor ${rawNumber} tidak terdaftar di WhatsApp`);
-                await deleteQueueWhatsapp(item.id);
-                isProcessing = false;
-                return;
-            }
+        for (const whatsapp of queue) {
+            const rawNumber = whatsapp.phone_number;
+            const phoneNumber = normalizeNumber(rawNumber); // Pastikan format 62xxxx
+            const chatId = phoneNumber + "@c.us";
 
             try {
-                const sent = await client.sendMessage(chatId, item.message);
-                console.log(`✅ Pesan terkirim ke ${phoneNumber}`);
+                const isRegistered = await client.isRegisteredUser(chatId);
+                if (!isRegistered) {
+                    console.log(`❌ Nomor ${rawNumber} tidak terdaftar di WhatsApp`);
 
-                await deleteQueueWhatsapp(item.id);
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                    // Hapus dari queue jika nomor tidak terdaftar
+                    await deleteQueueWhatsapp(whatsapp.id);
+                    continue;
+                }
+
+                try {
+                        const sent = await client.sendMessage(chatId, whatsapp.message);
+
+                        console.log(`✅ Pesan terkirim ke ${phoneNumber}`);
+
+                        // Tetap hapus data meskipun error serialize muncul (catch di luar)
+                        await deleteQueueWhatsapp(whatsapp.id);
+
+                        await new Promise(resolve => setTimeout(resolve, 1000)); // delay agar tidak flood
+                    } catch (error) {
+                        // Cek apakah error hanya terkait serialize, bukan pengiriman
+                        console.error(`❌ Gagal kirim ke ${phoneNumber}: ${error.message}`);
+
+                        // Tetap hapus queue jika error mengandung "serialize"
+                        if (error.message.includes('serialize')) {
+                            console.warn(`⚠️ Kirim berhasil tapi error serialize, hapus queue manual...`);
+                            await deleteQueueWhatsapp(whatsapp.id);
+                        }
+                    }
+
+                await new Promise(resolve => setTimeout(resolve, 1000)); // delay antar kirim
             } catch (error) {
                 console.error(`❌ Gagal kirim ke ${phoneNumber}: ${error.message}`);
-
-                if (error.message.includes('serialize')) {
-                    console.warn(`⚠️ Kirim berhasil tapi error serialize, hapus queue manual...`);
-                    await deleteQueueWhatsapp(item.id);
-                }
             }
-        } catch (error) {
-            console.error(`❌ Gagal kirim ke ${phoneNumber}: ${error.message}`);
         }
 
         isProcessing = false;
     }, 2000);
 }
 
-
 // =====================
 // FUNGSI HELPER
 // =====================
-
+function normalizeNumber(number) {
+    if (number.startsWith('0')) {
+        return '62' + number.slice(1);
+    }
+    return number;
+}
 
 async function consumeQueueWhatsapp() {
     const resultQuery = await pool.query('SELECT * FROM queue_whatsapps ORDER BY id ASC');
