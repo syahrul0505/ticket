@@ -99,7 +99,7 @@ class TicketController extends Controller
         ]);
 
        QueueWhatsapp::create([
-            'phone_number' => $ticketComment->phone ?? null,
+            'phone_number' => $ticketComment->phone ?? null , 
             'message' => "Anda telah ditugaskan ke tiket *{$ticket->code}*\n".
                         "Judul: {$ticket->title}\n".
                         "Status : {$ticket->status}\n".
@@ -193,7 +193,7 @@ class TicketController extends Controller
             ]);
 
             QueueWhatsapp::create([
-                'phone' => $ticketComment->phone ?? null,
+                'phone_number' => $ticketComment->phone ?? null,
                 'message' => "Anda telah ditugaskan ke tiket *{$ticket->code}*\n".
                             "Judul: {$ticket->title}\n".
                             "Status : {$ticket->status}\n".
