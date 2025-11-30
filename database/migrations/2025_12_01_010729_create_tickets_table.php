@@ -15,11 +15,15 @@ class CreateTicketsTable extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
-            $table->string('user');
-            $table->string('phone')->nullable();
-            $table->text('comment')->nullable();
-            $table->string('action')->nullable();
-            $table->foreign("ticket_id")->references("id")->on("tickets")->onDelete('cascade');
+            $table->string('code');
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->enum('priority', ['low','medium','high'])->default('medium');
+            $table->enum('status', ['open','in_progress','resolved','closed'])->default('open');
+            $table->string('created_by');
+            $table->string('assigned_to');
+            $table->string('system_to_fix')->nullable(); 
+            $table->string('problem_category')->nullable();
             $table->timestamps();
         });
     }
