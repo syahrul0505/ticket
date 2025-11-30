@@ -17,9 +17,6 @@ class CreateQueueWhatsappsTable extends Migration
             $table->id();
             $table->string('phone_number');
             $table->text('message'); 
-            $table->unsignedBigInteger('order_id');
-
-            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->timestamps();
         });
     }
