@@ -15,6 +15,11 @@ class CreateTicketsTable extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
+            $table->string('user');
+            $table->string('phone')->nullable();
+            $table->text('comment')->nullable();
+            $table->string('action')->nullable();
+            $table->foreign("ticket_id")->references("id")->on("tickets")->onDelete('cascade');
             $table->timestamps();
         });
     }
