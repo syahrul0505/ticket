@@ -274,13 +274,13 @@ class TicketController extends Controller
             $material = Ticket::findOrFail($materialId);
             $material->delete();
 
-            $request->session()->flash('success', "Delete data material successfully!");
+            $request->session()->flash('success', "Delete data Ticket successfully!");
         } catch (ModelNotFoundException $e) {
-            $request->session()->flash('failed', "Material not found!");
+            $request->session()->flash('failed', "ticket not found!");
         } catch (QueryException $e) {
-            $request->session()->flash('failed', "Failed to delete data material!");
+            $request->session()->flash('failed', "Failed to delete data ticket!");
         }
 
-        return redirect(route('materials.index'));
+        return redirect(route('tickets.index'));
     }
 }
