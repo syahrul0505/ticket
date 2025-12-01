@@ -40,7 +40,7 @@ class TicketController extends Controller
                             ->get();
 
             } else {
-                $ticket = Ticket::where('user_id', $user)
+                $ticket = Ticket::where('assigned_to', $user)
                             ->whereDate('created_at', $date)
                             ->orderBy('id', 'desc')
                             ->get();
