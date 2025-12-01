@@ -7,6 +7,8 @@ use App\Models\QueueWhatsapp;
 use App\Models\Ticket;
 use App\Models\TicketComment;
 use App\Models\User;
+use Doctrine\DBAL\Query\QueryException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use Yajra\DataTables\DataTables;
@@ -79,7 +81,7 @@ class TicketController extends Controller
                     $btn .= ' <button type="button" class="btn btn-sm btn-secondary tickets-show-table" data-bs-target="#tabs-'.$row->id.'-show-ticket">Comment</button>';
                 }
 
-                $btn .= ' <button type="button" class="btn btn-sm btn-danger materials-delete-table" data-bs-target="#tabs-'.$row->id.'-delete-material">Delete</button>';
+                $btn .= ' <button type="button" class="btn btn-sm btn-danger tickets-delete-table" data-bs-target="#tabs-'.$row->id.'-delete-ticket">Delete</button>';
 
                 return $btn;
             })
