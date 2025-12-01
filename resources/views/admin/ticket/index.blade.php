@@ -79,8 +79,8 @@
                         <select class="form-control @error('user_id') is-invalid @enderror" id="user" name="user_id" >
                             <option value="All" selected>All</option>
                             @foreach ($account_users as $account_user)
-                            <option value="{{ $account_user->fullname }}" {{ Request::get('user_id') == $account_user->fullname ? 'selected' : '' }}>
-                                {{ $account_user->fullname }}
+                            <option value="{{ $account_user->username }}" {{ Request::get('user_id') == $account_user->username ? 'selected' : '' }}>
+                                {{ $account_user->username }}
                             </option>
                             @endforeach
                         </select>
