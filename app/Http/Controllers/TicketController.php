@@ -16,13 +16,60 @@ class TicketController extends Controller
      public function index()
     {
         $data['page_title'] = 'Ticket List';
+        $data['account_users'] = User::get();
+
         return view('admin.ticket.index', $data);
     }
 
     public function getTicket(Request $request)
     {
+        $data['account_users'] = User::get();
+
+        $type = $request->input('type', 'day');
+        $user = $request->user_id;
+        $date = $request->input('start_date', date('Y-m-d'));
+
+        // Initialize $tickets as an empty collection
+        $tickets = collect();
+        $cashierName = $request->user_id;
+
+        if ($type == 'day') {
+            if ($user == 'All' || $user == null) {
+                $ticket = Ticket::whereDate('created_at', $date)
+                            ->orderBy('id', 'desc')
+                            ->get();
+
+            } else {
+                $ticket = Ticket::where('user_id', $user)
+                            ->whereDate('created_at', $date)
+                            ->orderBy('id', 'desc')
+                            ->get();
+            }
+        } elseif ($type == 'monthly') {
+            $month = $request->input('month', date('Y-m'));
+            $year = date('Y', strtotime($month));
+            $monthPart = date('m', strtotime($month));
+
+            $ticket = Ticket::whereMonth('created_at', $monthPart)
+                ->whereYear('created_at', $year) 
+                ->when($cashierName != 'All', function ($query) use ($cashierName) {
+                    return $query->where('assigned_to', $cashierName);
+                })
+                ->orderBy('id', 'desc')
+                ->get();
+
+        } elseif ($type == 'yearly') {
+                    $year = $request->input('year', date('Y'));
+                    $ticket = Ticket::whereYear('created_at', $year)
+                                ->when($cashierName != 'All', function ($query) use ($cashierName) {
+                                    return $query->where('assigned_to', $cashierName);
+                                })
+                                ->orderBy('id', 'desc')
+                                ->get();
+        }
+
         if ($request->ajax()) {
-            return DataTables::of(Ticket::query())
+            return DataTables::of($ticket)
             ->addIndexColumn()
             ->addColumn('action', function ($row) {
 

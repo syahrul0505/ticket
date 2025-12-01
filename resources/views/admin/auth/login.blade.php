@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
-    <title>SignIn | Giras POS </title>
+    <title>SignIn | Ticket </title>
     <link rel="icon" type="image/x-icon" href="{{ asset('images/logo/logo-vmond-head.png') }}"/>
     <link href="{{ asset('layouts/vertical-dark-menu/css/light/loader.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('layouts/vertical-dark-menu/css/dark/loader.css') }}" rel="stylesheet" type="text/css" />
@@ -39,7 +39,7 @@
                                 <div class="col-md-12 mb-3 text-center">
                                     <h2>Sign In</h2>
                                     <p class="mb-0 pb-0">Enter your email and password to login</p>
-                                    <p>Giras Adventure</p>
+                                    <p>Ticket</p>
                                 </div>
 
                                 <div class="col-md-12">

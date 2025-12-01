@@ -3,7 +3,7 @@
 
         <ul class="navbar-item theme-brand flex-row  text-center">
             <li class="nav-item theme-text">
-                <a href="{{ route('dashboard') }}" class="nav-link">Giras Adventure </a>
+                <a href="{{ route('dashboard') }}" class="nav-link">Ticket </a>
             </li>
         </ul>
 
