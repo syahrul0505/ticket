@@ -9,6 +9,19 @@
 {{-- Date Picker --}}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+<style>
+    .hilang{
+    display: none !important;
+  }
+    .dt-buttons {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .dt-buttons .btn {
+        margin-right: 5px;
+    }
+</style>
 @endpush
 
 @section('breadcumbs')
