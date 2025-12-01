@@ -264,8 +264,8 @@ class TicketController extends Controller
 
     public function getModalDelete($materialId)
     {
-        $material = Ticket::findOrFail($materialId);
-        return View::make('admin.ticket.modal-delete')->with('material', $material);
+        $ticket = Ticket::findOrFail($materialId);
+        return View::make('admin.ticket.modal-delete')->with('ticket', $ticket);
     }
 
     public function destroy(Request $request, $materialId)
