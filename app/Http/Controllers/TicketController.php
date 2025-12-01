@@ -147,12 +147,12 @@ class TicketController extends Controller
             'action'    => 'created'
         ]);
 
-       QueueWhatsapp::create([
+        QueueWhatsapp::create([
             'phone_number' => $ticketComment->phone ?? null , 
             'message' => "Anda telah ditugaskan ke tiket *{$ticket->code}*\n".
                         "Judul: {$ticket->title}\n".
                         "Status : {$ticket->status}\n".
-                        "Dari: {$ticket->assiged_to}\n".
+                        "Dari: {$ticket->created_by}\n".
                         "Ke: {$ticket->assigned_to}\n".
                         "Problem Category: {$ticket->problem_category}\n".
                         "Description: {$ticket->description}\n"
